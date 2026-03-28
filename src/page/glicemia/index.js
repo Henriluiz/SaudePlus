@@ -1,128 +1,165 @@
 import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { Text, View, Pressable, ImageBackground,TextInput, FlatList } from 'react-native';
-import * as Animatable from 'react-native-animatable';
+import { Text, View, Pressable, TextInput, FlatList, Dimensions } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
+import { LineChart } from "react-native-chart-kit";
+import { useNavigation } from "@react-navigation/native";
 import styles from './styles';
-import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Movements from '../../components/Movements'; // ajusta o caminho
+import Movements from '../../components/Movements';
 
+const screenWidth = Dimensions.get("window").width;
 
 export default function Glicemia() {
+
   const navigation = useNavigation();
 
   const [glicemia, setGlicemia] = useState('');
   const [list, setList] = useState([]);
-  
-    const recuperarDados = async () => {
-        try {
-        const obj = await AsyncStorage.getItem("@glicemias");
-        if (obj !== null) {
-            const valores = JSON.parse(obj)
-            return {valores}
-        } else 
-        {
-            return {valores: []}
-        }
-        } catch (error) {
-        console.log("Erro ao carregar", error);
-        }
+
+  const recuperarDados = async () => {
+    const obj = await AsyncStorage.getItem("@glicemias");
+    return obj ? { valores: JSON.parse(obj) } : { valores: [] };
+  };
+
+  const addItem = async (newDado) => {
+    const prev = await recuperarDados();
+    const dados = [...(prev?.valores ?? []), newDado];
+    dados.sort((a, b) => new Date(b.date) - new Date(a.date));
+    await AsyncStorage.setItem("@glicemias", JSON.stringify(dados));
+  };
+
+  const addList = async () => {
+    if (!glicemia.trim()) return;
+
+    const newDado = {
+      id: Date.now().toString(),
+      value: glicemia,
+      date: new Date().toISOString(),
     };
 
+    setList(prev => {
+      const nova = [...prev, newDado];
+      return nova.sort((a, b) => new Date(b.date) - new Date(a.date));
+    });
 
-    const addItem = async (newDado) => {
-        const prev = await recuperarDados();
+    await addItem(newDado);
+    setGlicemia('');
+  };
 
-        const dados = [...(prev?.valores ?? []), newDado];
-        dados.sort((a, b) => b.date - a.date);
-
-        await AsyncStorage.setItem("@glicemias", JSON.stringify(dados)); // Salvo
-
-        console.log("Salvo com sucesso");
-    };
-
-    const addList = async() => {
-        try {
-            if (!glicemia.trim()) {
-                return;    
-            }} catch (erro) {
-                return erro;
-            }
-        
-        const dataCompleta = new Date().toISOString();
-        
-        // const data = new Date(item.date).toLocaleDateString('pt-BR'); Extrair a data
-        // const hora = new Date(item.date).toLocaleTimeString('pt-BR'); Extrair a hora
-        // <Text>Data: {new Date(item.date).toLocaleDateString('pt-BR')}</Text>
-        // <Text>Hora: {new Date(item.date).toLocaleTimeString('pt-BR')}</Text>
-        
-        
-        const newDado = {
-        id: Date.now().toString(), // ID único
-        value: glicemia,
-        date: dataCompleta, // timestamp,
-        };
-
-        
-        setList(prev => {
-            const nova = [...prev, newDado];
-
-            return nova.sort((a, b) => b.date - a.date);
-        }); // Isso, muda o array por completo, assim o flatlist vai detectar e reiniciar
-        // e ordena!q
-
-        await addItem(newDado); 
-    };
-
-    useEffect(() => {
+  useEffect(() => {
     const carregar = async () => {
-        const antigoStatus = await recuperarDados();
-
-        if (!antigoStatus) return;
-
-        if (antigoStatus.valores?.length > 0) {
-            setList(antigoStatus.valores);
-        }
+      const antigo = await recuperarDados();
+      if (antigo?.valores?.length > 0) {
+        setList(antigo.valores);
+      }
     };
-
     carregar();
-    }, []);
+  }, []);
+
+  const chartData = {
+    labels: list.slice(0, 5).map(item =>
+      new Date(item.date).getDate().toString()
+    ),
+    datasets: [
+      { data: list.slice(0, 5).map(item => Number(item.value)) },
+    ],
+  };
 
   return (
     <View style={styles.container}>
-        {/* Entrada */}
-        <View style={styles.containerEntrada}>
-            <Text style={styles.titulo}>Registre a glicemia</Text>
-            <View>
-                <View>
-                    <TextInput
-                    style={styles.input}
-                    placeholder="Valor (em mg/dl)"
-                    placeholderTextColor="#C1E8FF"
-                    keyboardType="numeric"
-                    value={glicemia}
-                    onChangeText={setGlicemia}
-                    />
-                </View>
-                <Pressable style={styles.salvar} onPress={addList}>
-                    <Text>Salvar</Text>
-                </Pressable>
-            </View>
+
+      {/* 🔥 HEADER COM BOTÃO VOLTAR */}
+      <LinearGradient
+        colors={["#1B5E5A", "#4CA6A8"]}
+        style={styles.header}
+      >
+        <View style={styles.headerContent}>
+
+          {/* BOTÃO VOLTAR */}
+          <Pressable
+            onPress={() => navigation.navigate("Home")}
+            style={({ pressed }) => ({
+              opacity: pressed ? 0.6 : 1,
+              marginRight: 10
+            })}
+          >
+            <Ionicons name="arrow-back" size={26} color="#fff" />
+          </Pressable>
+
+          {/* ÍCONE + TÍTULO */}
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <MaterialCommunityIcons name="diabetes" size={28} color="#fff" />
+            <Text style={[styles.title, { marginLeft: 10 }]}>
+              Glicemia
+            </Text>
+          </View>
+
         </View>
-        {/* Histórico */}
-        <View style={styles.containerHistorico}>
-            <Text>Histórico</Text>
-            <FlatList
-            style={styles.list}
-            contentContainerStyle={{ gap: 3, paddingBottom: 20 }}
-            data={list}
-            keyExtractor={(item) => item.id.toString()}
-            showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => <Movements data={item} />}
+      </LinearGradient>
+
+      <View style={styles.content}>
+
+        {/* INPUT */}
+        <View style={styles.card}>
+          <Text style={styles.titulo}>Registrar valor</Text>
+
+          <TextInput
+            style={styles.input}
+            placeholder="Ex: 110 mg/dl"
+            placeholderTextColor="#235347"
+            keyboardType="numeric"
+            value={glicemia}
+            onChangeText={setGlicemia}
+          />
+
+          <Pressable
+            style={({ pressed }) => [
+              styles.botao,
+              { transform: [{ scale: pressed ? 0.96 : 1 }] }
+            ]}
+            onPress={addList}
+          >
+            <Text style={styles.botaoTexto}>Salvar</Text>
+          </Pressable>
+        </View>
+
+        {/* GRÁFICO */}
+        {list.length > 0 && (
+          <View style={styles.card}>
+            <Text style={styles.titulo}>Últimas medições</Text>
+
+            <LineChart
+              data={chartData}
+              width={screenWidth * 0.8}
+              height={180}
+              chartConfig={{
+                backgroundGradientFrom: "#fff",
+                backgroundGradientTo: "#fff",
+                decimalPlaces: 0,
+                color: () => "#4CA6A8",
+                labelColor: () => "#235347",
+              }}
+              style={{ borderRadius: 16 }}
             />
+          </View>
+        )}
+
+        {/* HISTÓRICO */}
+        <View style={styles.cardHistorico}>
+          <Text style={styles.titulo}>Histórico</Text>
+
+          <FlatList
+            data={list}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => <Movements data={item} />}
+          />
         </View>
-        <Text>Glicemia</Text>
-        <StatusBar style="auto" />
+
+      </View>
+
+      <StatusBar style="light" />
     </View>
   );
 }

@@ -1,45 +1,93 @@
-import { StyleSheet  } from "react-native";
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'; // Usa isso, no lugar de pixels ex: wp("10%") e hp("10%")
+import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#7DA0CA',
-    justifyContent: 'center',
-    alignItems: "center",
-    // gap: 50,
-  },
-// #052659
-  containerEntrada: {
-    flex: 0.15,
-    backgroundColor: "#052659",
-    justifyContent: "center",
-    alignItems: "center",
-    width: wp("80%"),
-    marginBottom: hp("10%")
+    backgroundColor: "#F5F7F6",
   },
 
-  containerHistorico: {
-    flex: 0.56,
-    backgroundColor: "#052659",
-    width: wp("80%"),
+  header: {
+    height: 170,
+    justifyContent: "center",
+    paddingTop: 50,
+    paddingHorizontal: 20,
+
+    borderBottomLeftRadius: 35,
+    borderBottomRightRadius: 35,
+  },
+
+  title: {
+    color: "#fff",
+    fontSize: 30,
+    fontWeight: "bold",
+    letterSpacing: 1,
+  },
+
+  content: {
+    flex: 1,
+    marginTop: -35,
+    backgroundColor: "#F5F7F6",
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    padding: 20,
+  },
+
+  card: {
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 20,
+    marginBottom: 20,
+
+    elevation: 10,
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 6 },
+  },
+
+  cardHistorico: {
+    flex: 1,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 15,
+
+    elevation: 10,
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 6 },
   },
 
   titulo: {
-    color: "#C1E8FF",
-    padding: 5,
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 15,
+    color: "#235347",
   },
 
   input: {
+    backgroundColor: "#F5F7F6",
+    borderRadius: 12,
     padding: 15,
-    width: wp("60%"),
-    borderWidth: 1.5,
-    color: "#C1E8FF",
+    fontSize: 16,
+    marginBottom: 15,
+    color: "#235347",
   },
 
-  salvar: {
+  botao: {
+    backgroundColor: "#4CA6A8",
+    padding: 15,
+    borderRadius: 12,
     alignItems: "center",
-    width: wp("25%"),
-    backgroundColor: "#C1E8FF"
   },
+
+  botaoTexto: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  headerContent: {
+  flexDirection: "row",
+  alignItems: "center",
+},
 });
