@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     content2Mr: {
         textAlign: "center",
         textAlignVertical: "center",
-        margin: 2,
+        margin: 2,       
     },
 
     date: {

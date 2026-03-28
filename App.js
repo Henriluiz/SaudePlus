@@ -14,14 +14,14 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="glicemia" screenOptions={{ headerShown: false }}>
-        <Stack.Screen
-          name="glicemia"
-          component={Glicemia}
-        />
+      <Stack.Navigator initialRouteName="home" screenOptions={{ headerShown: false }}>
         <Stack.Screen
           name="home"
           component={Home}
+        />
+        <Stack.Screen
+          name="glicemia"
+          component={Glicemia}
         />
         <Stack.Screen 
           name="movements"
