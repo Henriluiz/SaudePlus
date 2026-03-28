@@ -1,13 +1,15 @@
 import { Text, View, Pressable } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { useNavigation } from "@react-navigation/native";
 import styles from './styles';
 
 export default function Home() {
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>   
 
-      {/* HEADER */}
       <LinearGradient
         colors={["#1B5E5A", "#4CA6A8"]}
         style={styles.header}
@@ -15,7 +17,6 @@ export default function Home() {
         <Text style={styles.title}>HOME</Text>
       </LinearGradient>
 
-      {/* CONTEÚDO FEITO POR IA*/}
       <View style={styles.content}>
 
         <View style={styles.fileira}>
@@ -26,7 +27,14 @@ export default function Home() {
 
         <View style={styles.fileira}>
           <Botao nome="Alergias" icon={<MaterialCommunityIcons name="virus" size={30} color="#235347" />} />
-          <Botao nome="Glicemia" icon={<MaterialCommunityIcons name="diabetes" size={30} color="#235347" />} />
+
+          {/* 🔥 BOTÃO FUNCIONANDO */}
+          <Botao 
+            nome="Glicemia"
+            onPress={() => navigation.navigate("Glicemia")}
+            icon={<MaterialCommunityIcons name="diabetes" size={30} color="#235347" />} 
+          />
+
           <Botao nome="Pressão" icon={<Ionicons name="heart" size={30} color="#235347" />} />
         </View>
 
@@ -43,20 +51,19 @@ export default function Home() {
         </View>
 
       </View>
-
     </View>
   );
 }
 
-/* BOTÃO */
-function Botao({ nome, icon }) {
+function Botao({ nome, icon, onPress }) {
   return (
     <Pressable
+      onPress={onPress}
       style={({ pressed }) => [
         styles.botoes,
         {
           backgroundColor: pressed ? "#E6FFFA" : "#fff",
-          transform: [{ scale: pressed ? 0.95 : 1 }] // 👈 animação top
+          transform: [{ scale: pressed ? 0.95 : 1 }]
         }
       ]}
     >
