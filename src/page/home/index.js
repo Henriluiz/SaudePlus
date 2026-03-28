@@ -15,7 +15,7 @@ export default function Home() {
         <Text style={styles.title}>HOME</Text>
       </LinearGradient>
 
-      {/* CONTEÚDO */}
+      {/* CONTEÚDO FEITO POR IA*/}
       <View style={styles.content}>
 
         <View style={styles.fileira}>
