@@ -7,6 +7,24 @@ import styles from './styles';
 export default function Home() {
   const navigation = useNavigation();
 
+  function Botao({ nome, icon, onPress }) {
+    return (
+        <Pressable
+          onPress={onPress}
+          style={({ pressed }) => [
+            styles.botoes,
+            {
+              backgroundColor: pressed ? "#E6FFFA" : "#fff",
+              transform: [{ scale: pressed ? 0.95 : 1 }]
+            }
+          ]}
+        >
+          {icon}
+          <Text style={styles.nomeBotao}>{nome}</Text>
+        </Pressable>
+      );
+    }
+
   return (
     <View style={styles.container}>   
 
@@ -53,7 +71,9 @@ export default function Home() {
         </View>
 
         <View style={styles.fileira}>
-          <Botao nome="Fruta" icon={<MaterialCommunityIcons name="food-apple" size={30} color="#235347" />} />
+          <Botao nome="Fruta"
+          onPress={() => navigation.navigate("Nutriente")}
+          icon={<MaterialCommunityIcons name="food-apple" size={30} color="#235347" />} />
           <Botao nome="Dica" icon={<Ionicons name="chatbubble-ellipses" size={30} color="#235347" />} />
           <Botao nome="Emergência" icon={<MaterialCommunityIcons name="alarm-light" size={30} color="#B00020" />} />
         </View>
@@ -63,20 +83,3 @@ export default function Home() {
   );
 }
 
-function Botao({ nome, icon, onPress }) {
-  return (
-    <Pressable
-      onPress={onPress}
-      style={({ pressed }) => [
-        styles.botoes,
-        {
-          backgroundColor: pressed ? "#E6FFFA" : "#fff",
-          transform: [{ scale: pressed ? 0.95 : 1 }]
-        }
-      ]}
-    >
-      {icon}
-      <Text style={styles.nomeBotao}>{nome}</Text>
-    </Pressable>
-  );
-}

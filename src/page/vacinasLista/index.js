@@ -14,21 +14,127 @@ export default function VacinasLista({ route }) {
   const dados = {
     crianca: [
       { titulo: "Ao Nascer", vacinas: ["BCG-id", "Hepatite B (1ª dose)"] },
-      { titulo: "2 Meses", vacinas: ["Pentavalente", "Poliomielite", "Rotavírus"] },
-      { titulo: "4 Meses", vacinas: ["Pentavalente", "Poliomielite"] },
-      { titulo: "6 Meses", vacinas: ["Pentavalente", "Influenza"] },
-      { titulo: "12 Meses", vacinas: ["Tríplice Viral"] },
-      { titulo: "15 Meses", vacinas: ["DTP", "Hepatite A"] },
-      { titulo: "4 Anos", vacinas: ["DTP reforço"] },
-      { titulo: "9 a 14 Anos", vacinas: ["HPV"] },
+      { titulo: "1 Mês", vacinas: ["Hepatite B (2ª dose)"] },
+      {
+        titulo: "2 Meses",
+        vacinas: [
+          "Pentavalente (1ª dose)",    // DTP + Hib + Hep B
+          "VIP – Poliomielite inativada (1ª dose)",
+          "Pneumocócica 10V (1ª dose)",
+          "Rotavírus (1ª dose)",
+          "Meningocócica C (1ª dose)",
+        ],
+      },
+      {
+        titulo: "4 Meses",
+        vacinas: [
+          "Pentavalente (2ª dose)",
+          "VIP – Poliomielite inativada (2ª dose)",
+          "Pneumocócica 10V (2ª dose)",
+          "Rotavírus (2ª dose)",
+          "Meningocócica C (2ª dose)",
+        ],
+      },
+      {
+        titulo: "6 Meses",
+        vacinas: [
+          "Pentavalente (3ª dose)",
+          "VIP – Poliomielite inativada (3ª dose)",
+          "Influenza (1ª dose)",
+        ],
+      },
+      { titulo: "7 Meses", vacinas: ["Influenza (2ª dose – se 1ª vez)"] },
+      {
+        titulo: "9 Meses",
+        vacinas: ["Febre Amarela (1ª dose)", "Meningocócica B (1ª dose)"],
+      },
+      {
+        titulo: "12 Meses",
+        vacinas: [
+          "Tríplice Viral – SCR (1ª dose)",
+          "Pneumocócica 10V (reforço)",
+          "Meningocócica C (reforço)",
+          "Meningocócica B (2ª dose)",
+        ],
+      },
+      {
+        titulo: "15 Meses",
+        vacinas: [
+          "DTP (1º reforço)",
+          "VOP – Poliomielite oral (1º reforço)",
+          "Hepatite A (dose única)",
+          "Tetraviral – SCRV (2ª dose tríplice viral + varicela)",
+        ],
+      },
+      {
+        titulo: "4 Anos",
+        vacinas: [
+          "DTP (2º reforço)",
+          "VOP – Poliomielite oral (2º reforço)",
+          "Febre Amarela (2ª dose / reforço)",
+          "Varicela (reforço – se não recebeu Tetraviral)",
+        ],
+      },
+      {
+        titulo: "10 a 19 Anos",
+        vacinas: [
+          "HPV (se não vacinado anteriormente)",
+          "Meningocócica ACWY (reforço)",
+          "dT – Difteria e Tétano (se esquema incompleto)",
+          "Febre Amarela (conforme histórico)",
+          "Hepatite B (se não vacinado)",
+          "Tríplice Viral (se não vacinado)",
+          "Influenza (anual)",
+          "Dengue – Qdenga (10 a 14 anos)",
+        ],
+      },
     ],
 
     adulto: [
-      { titulo: "Adultos", vacinas: ["Hepatite B", "dT (tétano e difteria)"] },
+      {
+        titulo: "Adultos (20 a 59 Anos)",
+        vacinas: [
+          "Hepatite B (3 doses – se não vacinado)",
+          "dT – Difteria e Tétano (reforço a cada 10 anos)",
+          "Tríplice Viral – SCR (até 29 anos: 2 doses; 30 a 59 anos: 1 dose)",
+          "Febre Amarela (1 dose – conforme histórico e área de risco)",
+          "Influenza (anual)",
+          "Varicela (2 doses – se não vacinado e sem histórico da doença)",
+        ],
+      },
+      {
+        titulo: "Idosos (60 Anos ou mais)",
+        vacinas: [
+          "Influenza (anual)",
+          "Pneumocócica 23V (dose única)",
+          "dT – Difteria e Tétano (reforço a cada 10 anos)",
+          "Febre Amarela (conforme histórico – avaliar indicação)",
+          "Hepatite B (3 doses – se não vacinado)",
+          "Tríplice Viral (1 dose – se não vacinado)",
+          "Herpes-Zóster (recomendada pela SBIm – rede privada)",
+        ],
+      },
     ],
 
     gestante: [
-      { titulo: "Gestação", vacinas: ["dTpa", "Influenza", "Hepatite B"] },
+      {
+        titulo: "Gestação (qualquer trimestre)",
+        vacinas: [
+          "Influenza (1 dose – a cada gestação)",
+          "Hepatite B (3 doses – se não vacinada)",
+        ],
+      },
+      {
+        titulo: "A partir da 20ª semana",
+        vacinas: ["dTpa – Tríplice bacteriana acelular (a cada gestação)"],
+      },
+      {
+        titulo: "Pós-parto (puérpera não vacinada)",
+        vacinas: [
+          "Tríplice Viral – SCR (se não vacinada)",
+          "Varicela (se sem histórico de vacinação ou doença)",
+        ],
+      },
     ],
   };
 
