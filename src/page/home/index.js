@@ -39,8 +39,16 @@ export default function Home() {
         </View>
 
         <View style={styles.fileira}>
-          <Botao nome="IMC" icon={<MaterialCommunityIcons name="scale-bathroom" size={30} color="#235347" />} />
-          <Botao nome="Vacinas" icon={<MaterialCommunityIcons name="needle" size={30} color="#235347" />} />
+          <Botao 
+          nome="IMC" 
+          onPress={() => navigation.navigate("IMC")}
+          icon={<MaterialCommunityIcons name="scale-bathroom" size={30} color="#235347" />} 
+        />  
+          <Botao 
+          nome="Vacinas" 
+          onPress={() => navigation.navigate("Vacinas")}
+          icon={<MaterialCommunityIcons name="needle" size={30} color="#235347" />} 
+        />
           <Botao nome="Meditação" icon={<MaterialCommunityIcons name="meditation" size={30} color="#235347" />} />
         </View>
 
