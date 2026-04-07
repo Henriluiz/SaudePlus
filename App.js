@@ -4,6 +4,11 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import Home from "./src/page/home";
 import Glicemia from "./src/page/glicemia";
+import Vacinas from "./src/page/vacinas";
+import VacinasLista from "./src/page/vacinasLista";
+import IMC from "./src/page/imc";
+import Nutriente from "./src/page/nutriente"
+
 
 const Stack = createNativeStackNavigator();
 
@@ -16,6 +21,10 @@ export default function App() {
       >
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Glicemia" component={Glicemia} />
+        <Stack.Screen name="Vacinas" component={Vacinas} />
+        <Stack.Screen name="VacinasLista" component={VacinasLista} />
+        <Stack.Screen name="IMC" component={IMC} />
+        <Stack.Screen name="Nutriente" component={Nutriente} />
       </Stack.Navigator>
     </NavigationContainer>
   );
