@@ -67,5 +67,25 @@ export default StyleSheet.create({
     textAlign: "center",
   },
 
+  botoes: {
+    width: 150,
+    height: 150,
+    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+
+    elevation: 10,
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 6 },
+  },
+
+  nomeBotao: {
+    color: "#235347",
+    fontSize: 18,
+    fontWeight: "600",
+    marginTop: 5,
+  },
  
 });
