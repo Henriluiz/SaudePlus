@@ -38,8 +38,11 @@ export default function Home() {
       <View style={styles.content}>
 
         <View style={styles.fileira}>
-          <Botao nome="Sangue" icon={<MaterialCommunityIcons name="water-plus" size={30} color="#235347" />} />
-          <Botao nome="Água" icon={<Ionicons name="water" size={30} color="#235347" />} />
+          <Botao nome="Sangue"
+           icon={<MaterialCommunityIcons name="water-plus" size={30} color="#235347" />} />
+          <Botao nome="Água"
+            onPress={() => navigation.navigate("Agua")}
+           icon={<Ionicons name="water" size={30} color="#235347" />} />
           <Botao nome="Remédio" icon={<MaterialCommunityIcons name="pill" size={30} color="#235347" />} />
         </View>
 

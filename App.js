@@ -8,6 +8,7 @@ import Vacinas from "./src/page/vacinas";
 import VacinasLista from "./src/page/vacinasLista";
 import IMC from "./src/page/imc";
 import Nutriente from "./src/page/nutriente"
+import Agua from "./src/page/agua";
 
 
 const Stack = createNativeStackNavigator();
@@ -21,6 +22,7 @@ export default function App() {
       >
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Glicemia" component={Glicemia} />
+        <Stack.Screen name="Agua" component={Agua} />
         <Stack.Screen name="Vacinas" component={Vacinas} />
         <Stack.Screen name="VacinasLista" component={VacinasLista} />
         <Stack.Screen name="IMC" component={IMC} />

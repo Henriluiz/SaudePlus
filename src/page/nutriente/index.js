@@ -71,7 +71,7 @@ export default function Nutriente() {
             });
         } catch (error) {
             setErro("Erro ao buscar informações.");
-        console.log(error);
+            console.log(error);
         } finally {
             setLoading(false);
         }
@@ -94,14 +94,14 @@ export default function Nutriente() {
       {/* HEADER */}
       <LinearGradient colors={["#1B5E5A", "#4CA6A8"]} style={styles.header}>
         <Ionicons name="arrow-back" size={24} color="#fff" onPress={() => navigation.goBack()} />
-        <Text style={styles.headerTitle}>IMC</Text>
+        <Text style={styles.headerTitle}>Fruta</Text>
         <Ionicons name="speedometer" size={24} color="#fff" />
       </LinearGradient>
 
         {/* INPUTS */}
         <View style={styles.box}>
           <TextInput
-            placeholder="Fruta (Em Inglês)"
+            placeholder="Fruta"
             value={fruta}
             onChangeText={setFruta}
             keyboardType="default"
@@ -116,10 +116,6 @@ export default function Nutriente() {
         </Pressable>
         {/* RESULTADO + ANIMAÇÃO */}
         <View>
-            {loading && <ActivityIndicator size="large" color="#2E7D32" />}
-
-            {erro ? <Text style={styles.erro}>{erro}</Text> : null}
-
             {dados && (
                 <View style={styles.card}>
                     <Text style={styles.nome}>{fruta2}</Text>
@@ -135,6 +131,12 @@ export default function Nutriente() {
                     <Text style={styles.info}>🍊 Vitamina C: {dados.vitaminaC}</Text>
                 </View>
             )}
+
+            <View style={{marginTop: "50%"}}>
+                {loading && <ActivityIndicator size="large" color="#2E7D32" />}
+
+                {erro ? <Text style={styles.erro}>{erro}</Text> : null}
+            </View>
         </View>
     </View>
   );
