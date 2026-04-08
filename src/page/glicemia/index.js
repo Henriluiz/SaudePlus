@@ -66,7 +66,7 @@ export default function Glicemia() {
       { data: list.slice(0, 5).map(item => Number(item.value)) },
     ],
   };
-
+  
   return (
     <View style={styles.container}>
 

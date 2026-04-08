@@ -1,0 +1,49 @@
+import api from "./api";
+
+export async function cadastro(data) {
+
+  const response = await api.post("/register", data);
+
+  return response.data;
+
+}
+
+export async function login(login, senha) {
+
+  const response = await api.post("/login", {
+    login,
+    senha
+  });
+
+  return response.data;
+}
+
+export async function getPerfil() {
+
+  const response = await api.get("/perfil");
+
+  return response.data.user;
+
+}
+
+export async function logout() {
+
+  const response = await api.post("/logout");
+
+  return response.data;
+
+}
+
+
+export async function patchPerfil(data) {
+
+  const response = await api.patch("/update", data);
+
+  return response.data.user;
+
+}
+
+export async function deleteConta() {
+  const response = await api.delete("/delete");
+  return response.data;
+}

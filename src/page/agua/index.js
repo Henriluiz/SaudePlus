@@ -34,7 +34,11 @@ export default function Agua() {
             <Text style={styles.nomeBotao}>{nome}</Text>
             </Pressable>
         );
-        }
+    }
+
+    // function addAgua(valor){
+    //     const porcentagem = Math.min((progressoAtual / meta) * 100, 100);
+    // };
   
   return (
     <View style={styles.container}>
@@ -91,9 +95,9 @@ export default function Agua() {
             </View>
         </View>
         <View style={{flexDirection:"row" , justifyContent: "center", alignItems: "center", gap: 20, marginTop: 85}}>
-            <Botao nome="500ml" icon={<FontAwesome6 name="bottle-water" size={sizeIcon} color="black" />}
-            />
             <Botao nome="250ml" icon={<MaterialCommunityIcons name="cup-water" size={sizeIcon} color="black" />}
+            />
+            <Botao nome="500ml" icon={<FontAwesome6 name="bottle-water" size={sizeIcon} color="black" />}
             />
             {/* <Botao nome="250ml" icon={<AntDesign name="star" size={24} color="black" />} faz um botão personalizavel, que o user criará
             /> */}

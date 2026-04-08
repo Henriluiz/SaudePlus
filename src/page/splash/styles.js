@@ -3,7 +3,7 @@ import { StyleSheet  } from "react-native";
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#052659',
+    backgroundColor: '#F5F7F6',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -12,7 +12,16 @@ export default StyleSheet.create({
   ima: {
     width: 200,
     height: 150,
-    resizeMode: 'contain'
-  },  
+    resizeMode: 'contain',
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 20,
+  },
+  
+  text: {
+    fontWeight: "bold",
+    fontSize: 35,
+    color: "#235347"
+  },
 
 });
