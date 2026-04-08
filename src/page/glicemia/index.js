@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { Text, View, Pressable, TextInput, FlatList, Dimensions } from 'react-native';
+import { Text, View, Pressable, TextInput, FlatList, Dimensions, ScrollView, Keyboard  } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { LineChart } from "react-native-chart-kit";
@@ -98,7 +98,7 @@ export default function Glicemia() {
 
         </View>
       </LinearGradient>
-
+      
       <View style={styles.content}>
 
         {/* INPUT */}
@@ -119,7 +119,9 @@ export default function Glicemia() {
               styles.botao,
               { transform: [{ scale: pressed ? 0.96 : 1 }] }
             ]}
-            onPress={addList}
+            onPress={ () => {
+              Keyboard.dismiss();
+              addList()}}
           >
             <Text style={styles.botaoTexto}>Salvar</Text>
           </Pressable>

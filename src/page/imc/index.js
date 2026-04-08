@@ -79,7 +79,7 @@ export default function IMC() {
             style={styles.input}
           />
         </View>
-
+      </ScrollView>
         {/* RESULTADO + ANIMAÇÃO */}
         {imc && (
           <Animated.View style={{ opacity: fadeAnim }}>
@@ -115,7 +115,7 @@ export default function IMC() {
 
           </Animated.View>
         )}
-      </ScrollView>
+      
     </View>
   );
 }
