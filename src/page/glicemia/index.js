@@ -70,7 +70,7 @@ export default function Glicemia() {
   return (
     <View style={styles.container}>
 
-      {/* 🔥 HEADER COM BOTÃO VOLTAR */}
+      {/* HEADER */}
       <LinearGradient
         colors={["#1B5E5A", "#4CA6A8"]}
         style={styles.header}
