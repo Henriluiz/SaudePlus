@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import Login from "../page/login";
 import Cadastro from "../page/cadastro";
+import CadastroFoto from "../page/cadastro-foto";
 import { StackScreen } from "react-native-screens";
 
 const Stack = createNativeStackNavigator();
@@ -10,6 +11,7 @@ const Stack = createNativeStackNavigator();
 export default function AuthNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="cadastroFoto" component={CadastroFoto}/>
       <Stack.Screen name="login" component={Login} />
       <Stack.Screen name="cadastro" component={Cadastro} />
     </Stack.Navigator>

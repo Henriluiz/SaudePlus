@@ -7,6 +7,13 @@ export default StyleSheet.create({
     backgroundColor: "#F4F6F6",
   },
 
+  overlay: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+
   header: {
     paddingTop: 65,
     paddingBottom: 25,
@@ -16,13 +23,6 @@ export default StyleSheet.create({
     alignItems: "center",
     borderBottomLeftRadius: 25,
     borderBottomRightRadius: 25,
-  },
-
-  overlay: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "rgba(0,0,0,0.5)",
   },
 
   card: {

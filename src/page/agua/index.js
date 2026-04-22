@@ -69,10 +69,21 @@ export default function Agua() {
     };
 
     function addAgua(valor) {
-        setProgressoAtual(progressoAtual + valor);
-        atualizarProgresso();
-        console.log("Adicionado e Atualizado!")
-    };
+        const novoProgresso = progressoAtual + valor;
+        setProgressoAtual(novoProgresso);
+    
+        const porcentagem = Math.min((novoProgresso / meta) * 100, 100);
+    
+        if (porcentagem >= 100) {
+            setAviso("Parabéns! Você atingiu sua meta de água hoje!");
+        } else {
+            setAviso(`Você já bebeu ${novoProgresso} ml de ${meta} ml.`);
+        }
+    
+        setProgress(porcentagem);
+    
+        console.log("Adicionado e Atualizado!");
+    }
 
     function criarBotao(){
         if (entvalorPs) {
@@ -168,7 +179,8 @@ export default function Agua() {
             </View>
         </View>
 
-        <Modal transparent={true} visible={modal}>
+        {/* Modal fechando em qualquer lugar! */}
+        <Modal transparent={true} visible={modal}> 
             <Pressable style={styles.overlay} onPress={() => setModal(false)}>
                 <View style={styles.containerModal}>
                     <Text style={{color: "#fff", fontSize: 18}}>Faça seu próprio botão: </Text>

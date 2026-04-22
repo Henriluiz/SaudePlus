@@ -6,7 +6,7 @@ import AppNavigator from "./AppNavigator";
 
 export default function RootNavigator() {
   // const { user, loading } = useAuth();
-  const user = true
+  const user = false
   const loading = false
 
   if (loading) {
