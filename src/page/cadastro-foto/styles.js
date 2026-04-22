@@ -6,7 +6,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 export default StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#A383FB"
+        backgroundColor: "#1B5E5A"
     },
 
     containerImg: {
@@ -24,7 +24,7 @@ export default StyleSheet.create({
 
     logo: {
         width: wp("35%"),
-        height: hp("25%"),
+        height: hp("20%"),
         marginTop: 25,
         alignItems: "center"
     },
@@ -33,7 +33,7 @@ export default StyleSheet.create({
       fontSize: width * 0.08,
       marginBottom: hp("7%"),
       textAlign: "center",
-      color: "#A383FB",
+      color: "#1B5E5A",
       fontWeight: "bold"
     },
 
@@ -50,7 +50,9 @@ export default StyleSheet.create({
         borderRadius: 100,
         borderWidth: 4,
         borderColor: "#fff",
-        backgroundColor: "#A383FB"
+        backgroundColor: "#1B5E5A",
+        alignItems: "center",
+        justifyContent: "center",
     },
 
     fotoPerfil2: {
@@ -65,7 +67,7 @@ export default StyleSheet.create({
         position: "absolute",
         bottom: 5,
         right: width * 0.35,
-        backgroundColor: "#A383FB",
+        backgroundColor: "#1B5E5A",
         width: 28,
         height: 28,
         borderRadius: 14,
@@ -76,13 +78,13 @@ export default StyleSheet.create({
     btn: {
         width: wp("50%"),
         height: hp("5%"),
-        borderColor: "#A383FB",
+        borderColor: "#1B5E5A",
         borderWidth: 1.5,
         borderRadius: 12,
         fontSize: width * 0.14,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "#A383FB",
+        backgroundColor: "#1B5E5A",
     },
 
     mensagemErro: {
@@ -109,7 +111,7 @@ export default StyleSheet.create({
     width: width * 0.13,
     height: width * 0.13,
     borderRadius: 100,
-    backgroundColor: "#A383FB",
+    backgroundColor: "#1B5E5A",
     justifyContent: "center",
     alignItems: "center",
     opacity: 0.8,
@@ -122,9 +124,17 @@ export default StyleSheet.create({
     marginBottom: 4,
   },
 
+  imagem: {
+    width: "97%",
+    height: "97%",
+    borderRadius: 100, // metade do width/height pra ficar circular
+    resizeMode: "cover",
+    
+  },
+
   btnProximo: {
     flexDirection: "row",
-    backgroundColor: "#A383FB",
+    backgroundColor: "#1B5E5A",
     width: "70%",
     height: 60,
     borderRadius: 30,
