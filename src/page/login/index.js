@@ -1,45 +1,103 @@
-import { Text, View, Pressable } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import React, { useState } from "react";
+import {
+  Text,
+  View,
+  Image,
+  TextInput,
+  Pressable,
+  ScrollView
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import styles from './styles';
+import styles from "./styles";
 
 export default function Login() {
   const navigation = useNavigation();
 
-  function Botao({ nome, icon, onPress }) {
-    return (
-        <Pressable
-          onPress={onPress}
-          style={({ pressed }) => [
-            styles.botoes,
-            {
-              backgroundColor: pressed ? "#E6FFFA" : "#fff",
-              transform: [{ scale: pressed ? 0.95 : 1 }]
-            }
-          ]}
-        >
-          {icon}
-          <Text style={styles.nomeBotao}>{nome}</Text>
-        </Pressable>
-      );
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [erroEmail, setErroEmail] = useState("");
+  const [erroSenha, setErroSenha] = useState("");
+
+  function validarCampos() {
+    let valido = true;
+
+    if (!email.includes("@") || !email.includes(".")) {
+      setErroEmail("Email inválido");
+      valido = false;
+    } else setErroEmail("");
+
+    if (senha.length < 6) {
+      setErroSenha("Mínimo 6 caracteres");
+      valido = false;
+    } else setErroSenha("");
+
+    return valido;
+  }
+
+  function entrar() {
+    if (validarCampos()) {
+      navigation.navigate("Home");
     }
+  }
 
   return (
-    <View style={styles.container}>   
-
-      <LinearGradient
-        colors={["#1B5E5A", "#4CA6A8"]}
-        style={styles.header}
+    <View style={styles.container}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scroll}
       >
-        <Text style={styles.title}>HOME</Text>
-      </LinearGradient>
+        {/* PARTE VERDE (topo) */}
+        <View style={styles.containerImg}>
+          <Image style={styles.logo} />
+        </View>
 
-      <View style={styles.content}>
+        {/* PARTE BRANCA */}
+        <View style={styles.container2}>
+          <Text style={styles.titulo}>Bem-vindo</Text>
+          <Text style={styles.subtitulo}>Entre na sua conta</Text>
 
-       
-      </View>
+          <View style={styles.contInput}>
+
+            <TextInput
+              style={styles.input}
+              value={email}
+              onChangeText={setEmail}
+              placeholder="Email"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              placeholderTextColor="#999"
+            />
+            {erroEmail ? <Text style={styles.erro}>{erroEmail}</Text> : null}
+
+            <TextInput
+              style={styles.input}
+              value={senha}
+              onChangeText={setSenha}
+              placeholder="Senha"
+              secureTextEntry
+              placeholderTextColor="#999"
+            />
+            {erroSenha ? <Text style={styles.erro}>{erroSenha}</Text> : null}
+
+            <Pressable
+              style={({ pressed }) => [
+                styles.botao,
+                pressed && styles.botaoPressionado
+              ]}
+              onPress={entrar}
+            >
+              <Text style={styles.textoBotao}>Entrar</Text>
+            </Pressable>
+
+            <Pressable onPress={() => navigation.navigate("cadastro")}>
+              <Text style={styles.linkCadastro}>
+                Não tem conta? <Text style={styles.linkDestaque}>Criar</Text>
+              </Text>
+            </Pressable>
+
+          </View>
+        </View>
+      </ScrollView>
     </View>
   );
 }
-

@@ -104,7 +104,7 @@ export default function CadastroFoto() {
           </View>
           <View style={styles.containerBotoes2}>
             <Pressable
-              onPress={() => navigation.navigate("cadastroPessoal")}
+              onPress={() => navigation.navigate("cadastro")}
               style={styles.btnVoltar}
             >
               <Text style={styles.setaVoltar}>{"<"}</Text>

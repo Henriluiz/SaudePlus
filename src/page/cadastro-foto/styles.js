@@ -56,35 +56,34 @@ export default StyleSheet.create({
     },
 
     fotoPerfil2: {
-        width: "100%",
-        height: "100%",
-        margin: 57,
+      alignItems: "center",
+      justifyContent: "center",
     },
 
     
 
     iconeEditar: {
-        position: "absolute",
-        bottom: 5,
-        right: width * 0.35,
-        backgroundColor: "#1B5E5A",
-        width: 28,
-        height: 28,
-        borderRadius: 14,
-        alignItems: "center",
-        justifyContent: "center",
+      position: "absolute",
+      bottom: 5,
+      right: width * 0.35,
+      backgroundColor: "#1B5E5A",
+      width: 28,
+      height: 28,
+      borderRadius: 14,
+      alignItems: "center",
+      justifyContent: "center",
     },
 
     btn: {
-        width: wp("50%"),
-        height: hp("5%"),
-        borderColor: "#1B5E5A",
-        borderWidth: 1.5,
-        borderRadius: 12,
-        fontSize: width * 0.14,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "#1B5E5A",
+      width: wp("50%"),
+      height: hp("5%"),
+      borderColor: "#1B5E5A",
+      borderWidth: 1.5,
+      borderRadius: 12,
+      fontSize: width * 0.14,
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: "#1B5E5A",
     },
 
     mensagemErro: {
@@ -159,7 +158,7 @@ export default StyleSheet.create({
   },
 
   setaProximo: {
-    color: "#A383FB",
+    color: "#1B5E5A",
     fontSize: width * 0.06,
     fontWeight: "bold",
     marginBottom: 4,

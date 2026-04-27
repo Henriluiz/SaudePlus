@@ -1,83 +1,99 @@
 import { StyleSheet, Dimensions } from "react-native";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 
-const { width, height } = Dimensions.get("window");
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'; // Usa isso, no lugar de pixels ex: wp("10%") e hp("10%")
+const { width } = Dimensions.get("window");
 
 export default StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#1B5E5A"
-    },
+  container: {
+    flex: 1,
+    backgroundColor: "#1B5E5A",
+  },
 
-    containerImg: {
-        justifyContent: "center",
-        alignItems: "center",
-    },
+  containerImg: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingTop: hp("6%"),
+    paddingBottom: hp("3%"),
+  },
 
-    container2: {
-        flex: 1,
-        justifyContent: "center",
-        backgroundColor: "#ffffff",
-        borderTopLeftRadius: 40,
-        borderTopRightRadius: 40,
-    },
+  logo: {
+    width: wp("35%"),
+    height: hp("18%"),
+  },
 
-    logo: {
-        width: wp("35%"),
-        height: hp("20%"),
-        marginTop: 25,
-        alignItems: "center"
-    },
+  container2: {
+    flex: 1,
+    backgroundColor: "#fff",
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+    paddingTop: hp("4%"),
+    alignItems: "center",
+  },
 
-    titulo: {
-      fontSize: width * 0.08,
-      marginBottom: hp("7%"),
-      textAlign: "center",
-      color: "#1B5E5A",
-      fontWeight: "bold"
-    },
+  titulo: {
+    fontSize: width * 0.07,
+    marginBottom: hp("4%"),
+    color: "#1B5E5A",
+    fontWeight: "bold",
+  },
 
-    fotoContainer: {
-        alignItems: "center",
-        justifyContent: "center",
-        // marginTop: -60,
-        // marginBottom: 10,
-    },
+  contInput: {
+    width: "100%",
+    alignItems: "center",
+    gap: 12,
+  },
 
-    fotoPerfil: {
-        width: 200,
-        height: 200,
-        borderRadius: 100,
-        borderWidth: 4,
-        borderColor: "#fff",
-        backgroundColor: "#1B5E5A",
-        alignItems: "center",
-        justifyContent: "center",
-    },
+  input: {
+    width: "85%",
+    height: 50,
+    borderColor: "#1B5E5A",
+    borderWidth: 1.5,
+    borderRadius: 12,
+    paddingHorizontal: 15,
+    fontSize: width * 0.04,
+    backgroundColor: "#F9F9F9",
+    marginBottom: hp("0.4%"),
+  },
 
-    fotoPerfil2: {
-      width: "100%",
-      height: "100%",
-      margin: 57,
-    },
+  erro: {
+    width: "85%",
+    color: "red",
+    fontSize: 12,
+    marginTop: -5,
+  },
 
-    contInput: {
-      alignItems: "center",
-      gap: 10,
-    },
+  containerBotoes: {
+    flexDirection: "row",
+    width: "85%",
+    justifyContent: "space-between",
+    marginTop: hp("2%"),
+  },
 
-    input: {
-        width: "85%",
-        height: 50,
-        borderColor: "#A383FB",
-        borderWidth: 1.5,
-        borderRadius: 12,
-        paddingHorizontal: 15,
-        fontSize: width * 0.04,
-      },
+  botao: {
+    width: "48%",
+    height: 50,
+    backgroundColor: "#1B5E5A",
+    borderRadius: 12,
+    alignItems: "center",
+    justifyContent: "center",
+  },
 
-    label: {
-      fontSize: 18,
-      alignItems: "flex-start",
-    },
+  botaoSecundario: {
+    backgroundColor: "#fff",
+    borderWidth: 1.5,
+    borderColor: "#1B5E5A",
+  },
+
+  textoBotao: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+
+  textoSecundario: {
+    color: "#1B5E5A",
+  },
 });
