@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -9,10 +9,11 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { Picker } from "@react-native-picker/picker";
+import { getFocusedRouteNameFromRoute, useNavigation } from "@react-navigation/native";
 import styles from "./styles";
 
-export default function Cadastro() {
+export default function Cadastro({route}) {
   const navigation = useNavigation();
 
   const [nomeCompleto, setNomeCompleto] = useState("");
@@ -22,10 +23,12 @@ export default function Cadastro() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
-
+  const [genero, setGenero] = useState("");
+  
   const [erroNome, setErroNome] = useState("");
   const [erroData, setErroData] = useState("");
   const [erroEmail, setErroEmail] = useState("");
+  const [erroGenero, setErroGenero] = useState("");
   const [erroSenha, setErroSenha] = useState("");
   const [erroConfirmarSenha, setErroConfirmarSenha] = useState("");
   const [erroPeso, setErroPeso] = useState("");
@@ -68,6 +71,24 @@ export default function Cadastro() {
       } else setErroData("");
     }
 
+    if (!genero) {
+      setErroGenero("Selecione o gênero.");
+      valido = false;
+    } else setErroGenero("");
+
+    
+    const pesoNum = parseFloat(peso.replace(",", "."));
+    if (!peso || isNaN(pesoNum) || pesoNum < 20 || pesoNum > 300) {
+      setErroPeso("Peso inválido (20kg - 300kg)");
+      valido = false;
+    } else setErroPeso("");
+    
+    const alturaNum = parseFloat(altura);
+    if (!altura || isNaN(alturaNum) || alturaNum < 100 || alturaNum > 250) {
+      setErroAltura("Altura inválida (100cm - 250cm)");
+      valido = false;
+    } else setErroAltura("");
+    
     if (!email.includes("@") || !email.includes(".")) {
       setErroEmail("Email inválido.");
       valido = false;
@@ -86,27 +107,42 @@ export default function Cadastro() {
       valido = false;
     } else setErroConfirmarSenha("");
 
-    const pesoNum = parseFloat(peso.replace(",", "."));
-    if (!peso || isNaN(pesoNum) || pesoNum < 20 || pesoNum > 300) {
-      setErroPeso("Peso inválido (20kg - 300kg)");
-      valido = false;
-    } else setErroPeso("");
-
-    const alturaNum = parseFloat(altura);
-    if (!altura || isNaN(alturaNum) || alturaNum < 100 || alturaNum > 250) {
-      setErroAltura("Altura inválida (100cm - 250cm)");
-      valido = false;
-    } else setErroAltura("");
-
     return valido;
   }
 
   function continuar() {
     if (validarCampos()) {
-      navigation.navigate("cadastroFoto");
+      navigation.navigate("cadastroFoto", {
+        nomeCompleto,
+        dataNascimento,
+        peso,
+        altura,
+        email,
+        senha,
+        genero
+      });
     }
   }
+  
+  useEffect(() => {
 
+    async function load() {
+      if (route.params) {
+        const {nome, data, pesokg, alturacm, emailN, senhaAntiga, generoN} = route.params;
+        setNomeCompleto(nome || "")
+        setDataNascimento(data || "")
+        setEmail(emailN || "")
+        setSenha(senhaAntiga || "")
+        setPeso(pesokg || "")
+        setAltura(alturacm || "")
+        setGenero(generoN || "")
+      }
+
+    }
+
+    load();
+
+  }, [route.params]);
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -116,7 +152,7 @@ export default function Cadastro() {
         
         {/* TOPO VERDE */}
         <View style={styles.containerImg}>
-          <Image style={styles.logo} />
+          <Image style={styles.logo} source={require('../../../assets/saudemais_logo_white_text.svg')}/>
         </View>
 
         {/* PARTE BRANCA */}
@@ -129,6 +165,61 @@ export default function Cadastro() {
             <Text style={styles.titulo}>Crie sua conta</Text>
 
             <View style={styles.contInput}>
+
+              <TextInput
+                style={styles.input}
+                value={nomeCompleto}
+                onChangeText={setNomeCompleto}
+                placeholder="Nome completo"
+                placeholderTextColor="#999"
+              />
+              {erroNome ? <Text style={styles.erro}>{erroNome}</Text> : null}
+                
+              <TextInput
+                style={styles.input}
+                value={dataNascimento}
+                onChangeText={(text) => setDataNascimento(formatarData(text))}
+                placeholder="Data de nascimento (dd/mm/aaaa)"
+                keyboardType="numeric"
+                placeholderTextColor="#999"
+              />
+              {erroData ? <Text style={styles.erro}>{erroData}</Text> : null}
+
+              <View style={styles.pickerContainer}>
+                <Picker
+                  selectedValue={genero}
+                  onValueChange={(itemValue) => setGenero(itemValue)}
+                  style={styles.picker}
+                >
+                  <Picker.Item label="Selecione o gênero" value="" />
+                  <Picker.Item label="Masculino" value="MASCULINO" />
+                  <Picker.Item label="Feminino" value="FEMININO" />
+                  <Picker.Item label="Outro" value="OUTRO" />
+                  <Picker.Item label="Prefiro não informar" value="PREFIRO_NAO_INFORMAR" />
+                </Picker>
+              </View>
+
+              {erroGenero ? <Text style={styles.erro}>{erroGenero}</Text> : null}
+
+              <TextInput
+                style={styles.input}
+                value={peso}
+                onChangeText={setPeso}
+                placeholder="Peso (kg)"
+                keyboardType="numeric"
+                placeholderTextColor="#999"
+              />
+              {erroPeso ? <Text style={styles.erro}>{erroPeso}</Text> : null}
+
+              <TextInput
+                style={styles.input}
+                value={altura}
+                onChangeText={setAltura}
+                placeholder="Altura (cm)"
+                keyboardType="numeric"
+                placeholderTextColor="#999"
+              />
+              {erroAltura ? <Text style={styles.erro}>{erroAltura}</Text> : null}
 
               <TextInput
                 style={styles.input}
@@ -163,44 +254,7 @@ export default function Cadastro() {
                 <Text style={styles.erro}>{erroConfirmarSenha}</Text>
               ) : null}
 
-              <TextInput
-                style={styles.input}
-                value={nomeCompleto}
-                onChangeText={setNomeCompleto}
-                placeholder="Nome completo"
-                placeholderTextColor="#999"
-              />
-              {erroNome ? <Text style={styles.erro}>{erroNome}</Text> : null}
 
-              <TextInput
-                style={styles.input}
-                value={dataNascimento}
-                onChangeText={(text) => setDataNascimento(formatarData(text))}
-                placeholder="Data de nascimento (dd/mm/aaaa)"
-                keyboardType="numeric"
-                placeholderTextColor="#999"
-              />
-              {erroData ? <Text style={styles.erro}>{erroData}</Text> : null}
-
-              <TextInput
-                style={styles.input}
-                value={peso}
-                onChangeText={setPeso}
-                placeholder="Peso (kg)"
-                keyboardType="numeric"
-                placeholderTextColor="#999"
-              />
-              {erroPeso ? <Text style={styles.erro}>{erroPeso}</Text> : null}
-
-              <TextInput
-                style={styles.input}
-                value={altura}
-                onChangeText={setAltura}
-                placeholder="Altura (cm)"
-                keyboardType="numeric"
-                placeholderTextColor="#999"
-              />
-              {erroAltura ? <Text style={styles.erro}>{erroAltura}</Text> : null}
 
               <View style={styles.containerBotoes}>
                 <Pressable

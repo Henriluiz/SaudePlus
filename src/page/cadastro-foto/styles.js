@@ -23,10 +23,8 @@ export default StyleSheet.create({
     },
 
     logo: {
-        width: wp("35%"),
-        height: hp("20%"),
-        marginTop: 25,
-        alignItems: "center"
+      width: wp("65%"),
+      height: hp("23%"),
     },
 
     titulo: {

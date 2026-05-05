@@ -20,8 +20,8 @@ export default StyleSheet.create({
   },
 
   logo: {
-    width: wp("35%"),
-    height: hp("18%"),
+    width: wp("65%"),
+    height: hp("23%"),
   },
 
   container2: {
@@ -30,7 +30,7 @@ export default StyleSheet.create({
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
     paddingTop: hp("4%"),
-    alignItems: "center",
+    // alignItems: "center",
   },
 
   titulo: {
@@ -38,6 +38,20 @@ export default StyleSheet.create({
     marginBottom: hp("4%"),
     color: "#1B5E5A",
     fontWeight: "bold",
+    textAlign: "center",
+  },
+
+  pickerContainer: {
+    width: "85%",
+    borderColor: "#1B5E5A",
+    borderWidth: 1.5,
+    borderRadius: 12,
+    backgroundColor: "#F9F9F9",
+  },
+  
+  picker: {
+    width: "100%",
+    height: 50,
   },
 
   contInput: {
