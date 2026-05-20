@@ -48,6 +48,19 @@ export default function Cadastro({route}) {
     return cleaned;
   }
 
+  function formatDateBRToISO(dateBR) {
+    if (!dateBR) return '';
+  
+    const [day, month, year] = dateBR.split('/');
+  
+    // Validação simples
+    if (!day || !month || !year) {
+      throw new Error('Data inválida. Use o formato dd/mm/aaaa');
+    }
+  
+    return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+  }
+
   function validarCampos() {
     let valido = true;
 
@@ -70,6 +83,7 @@ export default function Cadastro({route}) {
         valido = false;
       } else setErroData("");
     }
+    setDataNascimento(formatDateBRToISO(dataNascimento));
 
     if (!genero) {
       setErroGenero("Selecione o gênero.");
@@ -111,10 +125,15 @@ export default function Cadastro({route}) {
   }
 
   function continuar() {
+
+    const dataISO = formatDateBRToISO(dataNascimento);
+    console.log(dataISO)
+
+
     if (validarCampos()) {
       navigation.navigate("cadastroFoto", {
         nomeCompleto,
-        dataNascimento,
+        dataNascimento: dataISO,
         peso,
         altura,
         email,
@@ -124,25 +143,25 @@ export default function Cadastro({route}) {
     }
   }
   
-  useEffect(() => {
+  // useEffect(() => {
 
-    async function load() {
-      if (route.params) {
-        const {nome, data, pesokg, alturacm, emailN, senhaAntiga, generoN} = route.params;
-        setNomeCompleto(nome || "")
-        setDataNascimento(data || "")
-        setEmail(emailN || "")
-        setSenha(senhaAntiga || "")
-        setPeso(pesokg || "")
-        setAltura(alturacm || "")
-        setGenero(generoN || "")
-      }
+  //   async function load() {
+  //     if (route.params) {
+  //       const {nome, data, pesokg, alturacm, emailN, senhaAntiga, generoN} = route.params;
+  //       setNomeCompleto(nome || "")
+  //       setDataNascimento(data || "")
+  //       setEmail(emailN || "")
+  //       setSenha(senhaAntiga || "")
+  //       setPeso(pesokg || "")
+  //       setAltura(alturacm || "")
+  //       setGenero(generoN || "")
+  //     }
 
-    }
+  //   }
 
-    load();
+  //   load();
 
-  }, [route.params]);
+  // }, [route.params]);
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}

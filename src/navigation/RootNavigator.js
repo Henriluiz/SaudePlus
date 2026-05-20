@@ -5,9 +5,9 @@ import AuthNavigator from "./AuthNavigator";
 import AppNavigator from "./AppNavigator";
 
 export default function RootNavigator() {
-  // const { user, loading } = useAuth();
-  const user = false
-  const loading = false
+  const { user, loading } = useAuth();
+  // const user = false
+  // const loading = false
 
   if (loading) {
     return <Splash />;

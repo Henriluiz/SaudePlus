@@ -59,25 +59,18 @@ export default function CadastroFoto( {route} ) {
 
   const enviar = async () => {
     try {
-      const formData = new FormData();
-
-      formData.append('nome', nomeCompleto);
-      formData.append('email', email);
-      formData.append('genero', genero);
-      formData.append('senha', senha);
-      formData.append('data', dataNascimento);
-      formData.append('peso', peso);
-      formData.append('altura', altura);
-      console.log(imagem)
-      if (imagem) {
-        formData.append('foto_perfil', {
-          uri: imagem,
-          name: 'foto.jpg',
-          type: 'image/jpeg',
-        });
-      }
+      const data = {
+        nomeCompleto,
+        email,
+        genero,
+        senha,
+        dataNascimento,
+        peso,
+        altura,
+        foto_perfil: imagem
+      };  
   
-      const response = await cadastro(formData);
+      const response = await cadastro(data);
   
       console.log("Usuário criado:", response);
 
@@ -121,15 +114,7 @@ export default function CadastroFoto( {route} ) {
         </View>
         <View style={styles.containerBotoes2}>
           <Pressable
-            onPress={() => navigation.navigate("cadastro", {
-              nome: nomeCompleto,
-              data: dataNascimento,
-              pesokg: peso,
-              alturacm: altura,
-              emailN: email,
-              senhaAntiga: senha,
-              generoN: genero
-            })}
+            onPress={() => navigation.goBack()}
             style={styles.btnVoltar}
           >
             <Text style={styles.setaVoltar}>{"<"}</Text>

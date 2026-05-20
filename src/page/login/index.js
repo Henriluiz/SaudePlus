@@ -5,10 +5,11 @@ import {
   Image,
   TextInput,
   Pressable,
-  ScrollView
+  ScrollView, ActivityIndicator 
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import styles from "./styles";
+import { useAuth } from "../../context/AuthContext";
 
 export default function Login() {
   const navigation = useNavigation();
@@ -17,6 +18,9 @@ export default function Login() {
   const [senha, setSenha] = useState("");
   const [erroEmail, setErroEmail] = useState("");
   const [erroSenha, setErroSenha] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const { signIn } = useAuth();
 
   function validarCampos() {
     let valido = true;
@@ -34,10 +38,18 @@ export default function Login() {
     return valido;
   }
 
-  function entrar() {
+  const entrar = async() =>  {
+    setLoading(true)
     if (validarCampos()) {
-      navigation.navigate("Home");
+      
+      try {
+        response = await signIn(email, senha)
+        console.log(response);
+      } catch (e){}
+      
     }
+    setLoading(false)
+
   }
 
   return (
@@ -86,7 +98,13 @@ export default function Login() {
               ]}
               onPress={entrar}
             >
-              <Text style={styles.textoBotao}>Entrar</Text>
+              {loading ? 
+              (
+                <ActivityIndicator color="white" size="small" />
+              ) : (
+                <Text style={styles.textoBotao}>Entrar</Text>
+              )
+              }
             </Pressable>
 
             <Pressable onPress={() => navigation.navigate("cadastro")}>
