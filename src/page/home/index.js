@@ -7,6 +7,7 @@ import styles from './styles';
 export default function Home() {
   const navigation = useNavigation();
 
+
   function Botao({ nome, icon, onPress }) {
     return (
         <Pressable
@@ -43,7 +44,9 @@ export default function Home() {
           <Botao nome="Água"
             onPress={() => navigation.navigate("Agua")}
            icon={<Ionicons name="water" size={30} color="#235347" />} />
-          <Botao nome="Remédio" icon={<MaterialCommunityIcons name="pill" size={30} color="#235347" />} />
+          <Botao nome="Remédio"
+            onPress={() => navigation.navigate("Remedio")}
+           icon={<MaterialCommunityIcons name="pill" size={30} color="#235347" />} />
         </View>
 
         <View style={styles.fileira}>

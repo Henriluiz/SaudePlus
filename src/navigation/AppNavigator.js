@@ -2,6 +2,7 @@ import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import Home from "../page/home";
+import Remedio from "../page/remedio";
 import Glicemia from "../page/glicemia";
 import Nutriente from "../page/nutriente";
 import IMC from "../page/imc";
@@ -21,6 +22,7 @@ export default function AppNavigator() {
       <Stack.Screen name="Nutriente" component={Nutriente} />
       <Stack.Screen name="IMC" component={IMC} />
       <Stack.Screen name="Agua" component={Agua} />
+      <Stack.Screen name="Remedio" component={Remedio} />
       <Stack.Screen name="Vacinas" component={Vacinas} />
       <Stack.Screen name="VacinasLista" component={VacinasLista} />
     </Stack.Navigator>
