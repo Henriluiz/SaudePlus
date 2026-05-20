@@ -23,7 +23,7 @@ export default function Cadastro({route}) {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
-  const [genero, setGenero] = useState("");
+  const [genero, setGenero] = useState("MASCULINO");
   
   const [erroNome, setErroNome] = useState("");
   const [erroData, setErroData] = useState("");

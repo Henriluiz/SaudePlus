@@ -43,9 +43,11 @@ export default function Login() {
     if (validarCampos()) {
       
       try {
-        response = await signIn(email, senha)
+        const response = await signIn(email, senha)
         console.log(response);
-      } catch (e){}
+      } catch (e){
+        console.log("❌ Erro no login:", e.message);
+      }
       
     }
     setLoading(false)

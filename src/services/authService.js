@@ -1,5 +1,6 @@
 import api from "./api";
 import { Platform } from "react-native";
+import { saveSession } from "./authStogare";
 
 export async function cadastro(data) {
 
@@ -41,29 +42,20 @@ export async function cadastro(data) {
   // return response.data;
 
   try {
-    const response = await fetch("http://localhost:8000/api/register", {
-      method: "POST",
-      body: formData,
+    const response = await api.post("/register", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
     });
 
-    const json = await response.json();
-    console.log("✅ Resposta:", JSON.stringify(json, null, 2));
-    return json;
+    return response.data;
   } catch (error) {
     console.log("❌ Erro fetch:", error.message);
     throw error;
   }
 }
 
-
 export async function login(login, senha) {
-
-  const response = await api.post("/login", {
-    login,
-    senha
-  });
-
-  return response.data;
+  const response = await api.post("/login", { login, senha });
+  return response.data; // ← limpo, só retorna os dados
 }
 
 export async function getPerfil() {

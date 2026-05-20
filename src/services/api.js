@@ -48,13 +48,12 @@ api.interceptors.response.use(
   response => response,
 
   async error => {
+    const isAuthRoute = error.config?.url?.includes("/login") || 
+                        error.config?.url?.includes("/register");
 
-    if (error.response?.status === 401) {
-
+    if (error.response?.status === 401 && !isAuthRoute) {
       await clearSession();
-
       console.log("Sessão expirada");
-
     }
 
     return Promise.reject(error);

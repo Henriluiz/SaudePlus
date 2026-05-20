@@ -74,6 +74,8 @@ export default function CadastroFoto( {route} ) {
   
       console.log("Usuário criado:", response);
 
+      navigation.navigate("login")
+
     } catch (error) {
         console.log(error);
         console.log("ERRO COMPLETO: ", error.response?.data)
