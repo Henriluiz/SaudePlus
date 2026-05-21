@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Alert, Platform, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import { Alert, Image, Modal, Platform, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
+import * as ImagePicker from 'expo-image-picker';
+import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import styles from './styles';
@@ -23,18 +25,61 @@ export default function Remedio() {
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [medicamento, setMedicamento] = useState('');
   const [dosagem, setDosagem] = useState('');
+  const [comprimido, setComprimido] = useState('');
   const [horario, setHorario] = useState('');
   const [horarios, setHorarios] = useState([]);
   const [ateQuando, setAteQuando] = useState('');
+  const [fotoMedicamento, setFotoMedicamento] = useState(null);
+  const [modalConfirmacao, setModalConfirmacao] = useState(false); // modal de confirmação
 
   useEffect(() => {
     async function loadMedications() {
       try {
         const saved = await AsyncStorage.getItem(MEDICATION_KEY);
-        if (saved) {
-          const list = JSON.parse(saved);
-          setMedicationList(list);
+        if (!saved) return;
+
+        const list = JSON.parse(saved);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const ativos = [];
+        const vencidos = [];
+
+        for (const med of list) {
+          const partes = med.ateQuando?.split('/').map(Number);
+          if (partes && partes.length === 3) {
+            const [day, month, year] = partes;
+            const dataFinal = new Date(year, month - 1, day);
+            dataFinal.setHours(0, 0, 0, 0);
+
+            if (dataFinal < today) {
+              vencidos.push(med);
+            } else {
+              ativos.push(med);
+            }
+          } else {
+            ativos.push(med);
+          }
         }
+
+        for (const med of vencidos) {
+          if (med.notificationIds?.length > 0) {
+            for (const id of med.notificationIds) {
+              try {
+                await Notifications.cancelScheduledNotificationAsync(id);
+              } catch (e) {
+                console.log('Aviso ao cancelar notificação de vencido:', e);
+              }
+            }
+          }
+        }
+
+        if (vencidos.length > 0) {
+          await AsyncStorage.setItem(MEDICATION_KEY, JSON.stringify(ativos));
+          console.log(`${vencidos.length} remédio(s) vencido(s) removido(s) automaticamente.`);
+        }
+
+        setMedicationList(ativos);
       } catch (error) {
         console.log('Erro ao carregar remédios:', error);
       }
@@ -43,6 +88,49 @@ export default function Remedio() {
     loadMedications();
   }, []);
 
+  // ─── Permissões de câmera/galeria ────────────────────────────────────────────
+  const solicitarPermissoes = async () => {
+    const camera = await ImagePicker.requestCameraPermissionsAsync();
+    const galeria = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (camera.status !== 'granted' || galeria.status !== 'granted') {
+      Alert.alert('Permissão negada', 'É necessário permitir acesso à câmera e galeria.');
+      return false;
+    }
+    return true;
+  };
+
+  const tirarFoto = async () => {
+    const permissoes = await solicitarPermissoes();
+    if (!permissoes) return;
+
+    const resultado = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!resultado.canceled) {
+      setFotoMedicamento(resultado.assets[0].uri);
+    }
+  };
+
+  const escolherDaGaleria = async () => {
+    const permissoes = await solicitarPermissoes();
+    if (!permissoes) return;
+
+    const resultado = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!resultado.canceled) {
+      setFotoMedicamento(resultado.assets[0].uri);
+    }
+  };
+
+  // ─── Selecionar medicamento da lista ─────────────────────────────────────────
   function handleSelectMedication(index) {
     if (index === -1) {
       setSelectedIndex(-1);
@@ -50,15 +138,19 @@ export default function Remedio() {
       setDosagem('');
       setHorarios([]);
       setHorario('');
+      setComprimido('');
       setAteQuando('');
+      setFotoMedicamento(null);
     } else {
       const med = medicationList[index];
       setSelectedIndex(index);
       setMedicamento(med.medicamento || '');
       setDosagem(med.dosagem || '');
       setHorarios(med.horarios || []);
+      setComprimido(med.comprimido || '');
       setHorario('');
       setAteQuando(normalizeDateString(med.ateQuando || ''));
+      setFotoMedicamento(med.foto || null);
     }
   }
 
@@ -147,7 +239,6 @@ export default function Remedio() {
       });
     }
 
-    // Calcula quantos segundos faltam para o próximo horário
     const now = new Date();
     const nextTime = new Date(now);
     nextTime.setHours(hours, minutes, 0, 0);
@@ -194,21 +285,26 @@ export default function Remedio() {
     return ids;
   }
 
-  async function handleRegisterMedication() {
+  // ─── Valida campos e abre o modal ────────────────────────────────────────────
+  function handleRegisterMedication() {
     if (!medicamento.trim()) {
       Alert.alert('Preencha o remédio', 'Digite o nome do remédio que você está usando.');
       return;
     }
-
     if (horarios.length === 0) {
       Alert.alert('Adicione horários', 'Adicione ao menos um horário para receber o lembrete.');
       return;
     }
-
     if (!ateQuando.trim() || !isValidDate(ateQuando.trim())) {
       Alert.alert('Data inválida', 'Informe a data final no formato DD/MM/YYYY.');
       return;
     }
+    setModalConfirmacao(true);
+  }
+
+  // ─── Chamada ao confirmar no modal ───────────────────────────────────────────
+  async function handleConfirmarRegistro() {
+    setModalConfirmacao(false);
 
     const newRecord = {
       medicamento: medicamento.trim(),
@@ -217,6 +313,8 @@ export default function Remedio() {
       ateQuando: ateQuando.trim(),
       registradoEm: new Date().toISOString(),
       notificationIds: [],
+      comprimido,
+      foto: fotoMedicamento,
     };
 
     try {
@@ -258,7 +356,6 @@ export default function Remedio() {
           style: 'destructive',
           onPress: async () => {
             try {
-              // Tenta cancelar todas as notificações agendadas
               if (med.notificationIds?.length > 0) {
                 for (const id of med.notificationIds) {
                   try {
@@ -269,11 +366,10 @@ export default function Remedio() {
                 }
               }
 
-              // Remove o remédio da lista
               const newList = medicationList.filter((_, i) => i !== index);
               await AsyncStorage.setItem(MEDICATION_KEY, JSON.stringify(newList));
               setMedicationList(newList);
-              
+
               if (selectedIndex === index) {
                 handleSelectMedication(-1);
               }
@@ -331,6 +427,33 @@ export default function Remedio() {
       </LinearGradient>
 
       <View style={styles.formCard}>
+
+        {/* ── FOTO DO MEDICAMENTO ── */}
+        <Text style={styles.label}>Foto do medicamento</Text>
+        <View style={styles.fotoContainer}>
+          <Pressable style={styles.fotoPerfil} onPress={tirarFoto}>
+            {fotoMedicamento ? (
+              <Image source={{ uri: fotoMedicamento }} style={styles.imagemMedicamento} />
+            ) : (
+              <View style={styles.fotoPlaceholder}>
+                <Ionicons name="medkit-outline" size={48} color="#4CA6A8" />
+                <Text style={styles.fotoPlaceholderText}>Toque para fotografar</Text>
+              </View>
+            )}
+          </Pressable>
+
+          <Pressable style={styles.btnGaleria} onPress={escolherDaGaleria}>
+            <Ionicons name="images-outline" size={16} color="#fff" />
+            <Text style={styles.btnGaleriaText}>Escolher da galeria</Text>
+          </Pressable>
+
+          {fotoMedicamento && (
+            <Pressable style={styles.btnRemoverFoto} onPress={() => setFotoMedicamento(null)}>
+              <Text style={styles.btnRemoverFotoText}>Remover foto</Text>
+            </Pressable>
+          )}
+        </View>
+
         <Text style={styles.label}>Nome do remédio</Text>
         <TextInput
           style={styles.input}
@@ -345,7 +468,16 @@ export default function Remedio() {
           style={styles.input}
           value={dosagem}
           onChangeText={setDosagem}
-          placeholder="Ex: 500mg"
+          placeholder="Ex: 500mg / 5ml"
+          placeholderTextColor="#9AA8A6"
+        />
+
+        <Text style={styles.label}>Comprimidos</Text>
+        <TextInput
+          style={styles.input}
+          value={comprimido}
+          onChangeText={setComprimido}
+          placeholder="Ex: 1"
           placeholderTextColor="#9AA8A6"
         />
 
@@ -417,8 +549,17 @@ export default function Remedio() {
                   ]}
                   onPress={() => handleSelectMedication(index)}
                 >
-                  <Text style={styles.medicationItemName}>{med.medicamento}</Text>
-                  <Text style={styles.medicationItemSubtext}>{med.horarios?.join(', ')}</Text>
+                  {med.foto ? (
+                    <Image source={{ uri: med.foto }} style={styles.medicationItemFoto} />
+                  ) : (
+                    <View style={styles.medicationItemFotoPlaceholder}>
+                      <Ionicons name="medkit-outline" size={28} color="#4CA6A8" />
+                    </View>
+                  )}
+                  <View style={styles.medicationItemInfo}>
+                    <Text style={styles.medicationItemName}>{med.medicamento}</Text>
+                    <Text style={styles.medicationItemSubtext}>{med.horarios?.join(', ')}</Text>
+                  </View>
                 </Pressable>
                 <Pressable
                   style={styles.medicationDeleteBtn}
@@ -434,6 +575,98 @@ export default function Remedio() {
           </Pressable>
         </View>
       ) : null}
+
+      {/* ── MODAL DE CONFIRMAÇÃO ── */}
+      <Modal
+        visible={modalConfirmacao}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setModalConfirmacao(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+
+            {/* Cabeçalho */}
+            <LinearGradient colors={['#1B5E5A', '#4CA6A8']} style={styles.modalHeader}>
+              <Ionicons name="checkmark-circle-outline" size={32} color="#fff" />
+              <Text style={styles.modalHeaderTitle}>Confirmar dados</Text>
+              <Text style={styles.modalHeaderSubtitle}>Revise as informações antes de salvar</Text>
+            </LinearGradient>
+
+            <ScrollView style={styles.modalBody} contentContainerStyle={styles.modalBodyContent}>
+
+              {/* Foto + Nome + Dosagem */}
+              <View style={styles.modalFotoRow}>
+                {fotoMedicamento ? (
+                  <Image source={{ uri: fotoMedicamento }} style={styles.modalFoto} />
+                ) : (
+                  <View style={styles.modalFotoPlaceholder}>
+                    <Ionicons name="medkit-outline" size={36} color="#4CA6A8" />
+                  </View>
+                )}
+                <View style={styles.modalFotoInfo}>
+                  <Text style={styles.modalMedName}>{medicamento.trim()}</Text>
+                  {dosagem.trim() ? (
+                    <Text style={styles.modalMedDosagem}>{dosagem.trim()}</Text>
+                  ) : (
+                    <Text style={styles.modalMedDosagemVazia}>Dosagem não informada</Text>
+                  )}
+                  {comprimido.trim() ? (
+                    <Text style={styles.modalMedDosagem}>{comprimido.trim()} comprimido(s)</Text>
+                  ) : null}
+                </View>
+              </View>
+
+              <View style={styles.modalDivider} />
+
+              {/* Horários */}
+              <View style={styles.modalInfoRow}>
+                <Ionicons name="time-outline" size={18} color="#4CA6A8" />
+                <Text style={styles.modalInfoLabel}>Horários</Text>
+              </View>
+              <View style={styles.modalHorariosWrap}>
+                {horarios.map(h => (
+                  <View key={h} style={styles.modalHorarioBadge}>
+                    <Text style={styles.modalHorarioBadgeText}>{h}</Text>
+                  </View>
+                ))}
+              </View>
+
+              <View style={styles.modalDivider} />
+
+              {/* Até quando */}
+              <View style={styles.modalInfoRow}>
+                <Ionicons name="calendar-outline" size={18} color="#4CA6A8" />
+                <Text style={styles.modalInfoLabel}>Até quando</Text>
+                <Text style={styles.modalInfoValue}>{ateQuando.trim()}</Text>
+              </View>
+
+            </ScrollView>
+
+            {/* Botões */}
+            <View style={styles.modalFooter}>
+              <Pressable
+                style={styles.modalBtnCancelar}
+                onPress={() => setModalConfirmacao(false)}
+              >
+                <Text style={styles.modalBtnCancelarText}>Corrigir</Text>
+              </Pressable>
+
+              <Pressable
+                style={styles.modalBtnConfirmar}
+                onPress={handleConfirmarRegistro}
+              >
+                <Text style={styles.modalBtnConfirmarText}>
+                  {selectedIndex >= 0 ? 'Atualizar' : 'Confirmar'}
+                </Text>
+              </Pressable>
+            </View>
+
+          </View>
+        </View>
+      </Modal>
+      {/* ── FIM MODAL ── */}
+
     </ScrollView>
   );
 }
