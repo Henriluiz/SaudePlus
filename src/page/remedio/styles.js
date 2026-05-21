@@ -12,11 +12,28 @@ export default StyleSheet.create({
 
   header: {
     height: 170,
-    justifyContent: 'center',
     paddingTop: 50,
     paddingHorizontal: 20,
     borderBottomLeftRadius: 35,
     borderBottomRightRadius: 35,
+  },
+
+  headerView: {
+    flexDirection: "row",
+    gap: 15,
+  },
+
+  backButton: {
+    // position: 'absolute',
+    // top: 55,
+    // left: 20,
+    // zIndex: 10,
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   title: {
@@ -536,4 +553,25 @@ export default StyleSheet.create({
     color: '#1B5E5A',
     fontWeight: '700',
   },
+
+  successOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.55)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 24,
+  },
+  
+  successContainer: {
+    width: '100%',
+    maxWidth: 340,
+    paddingVertical: 36,
+    paddingHorizontal: 24,
+    alignItems: 'center',
+  },
+  
+  successIconContainer: {
+    marginBottom: 20,
+  },
+
 });

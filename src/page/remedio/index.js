@@ -6,6 +6,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
+import { Audio } from 'expo-av';
 import styles from './styles';
 
 Notifications.setNotificationHandler({
@@ -30,7 +31,9 @@ export default function Remedio() {
   const [horarios, setHorarios] = useState([]);
   const [ateQuando, setAteQuando] = useState('');
   const [fotoMedicamento, setFotoMedicamento] = useState(null);
-  const [modalConfirmacao, setModalConfirmacao] = useState(false); // modal de confirmação
+
+  const [modalConfirmacao, setModalConfirmacao] = useState(false);
+  const [modalSucesso, setModalSucesso] = useState(false);
 
   useEffect(() => {
     async function loadMedications() {
@@ -302,6 +305,26 @@ export default function Remedio() {
     setModalConfirmacao(true);
   }
 
+  async function playSuccessSound() {
+    try {
+      const { sound } = await Audio.Sound.createAsync(
+        require('../../../assets/vitory.mp3') // caminho do som
+      );
+  
+      await sound.playAsync();
+  
+      // libera memória após tocar
+      sound.setOnPlaybackStatusUpdate((status) => {
+        if (status.didJustFinish) {
+          sound.unloadAsync();
+        }
+      });
+  
+    } catch (error) {
+      console.log('Erro ao tocar som:', error);
+    }
+  }
+
   // ─── Chamada ao confirmar no modal ───────────────────────────────────────────
   async function handleConfirmarRegistro() {
     setModalConfirmacao(false);
@@ -335,7 +358,13 @@ export default function Remedio() {
       await AsyncStorage.setItem(MEDICATION_KEY, JSON.stringify(newList));
       setMedicationList(newList);
       handleSelectMedication(-1);
-      Alert.alert('Sucesso', selectedIndex >= 0 ? 'Remédio atualizado!' : 'Remédio registrado com sucesso!');
+
+      // Configuração relacionada com o modal de sucesso
+      await playSuccessSound();
+      setModalSucesso(true);
+      await new Promise(resolve => setTimeout(resolve, 10000));
+      setModalSucesso(false);
+
     } catch (error) {
       console.log('Erro ao salvar remédio:', error);
       Alert.alert('Erro', 'Não foi possível registrar o remédio.');
@@ -422,8 +451,20 @@ export default function Remedio() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <LinearGradient colors={['#1B5E5A', '#4CA6A8']} style={styles.header}>
-        <Text style={styles.title}>Medicamento</Text>
-        <Text style={styles.subtitle}>Registre seu remédio e receba lembretes.</Text>
+        <View style={styles.headerView}>
+          {/* Botão voltar */}
+          <Pressable
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+          >
+            <Ionicons name="arrow-back" size={26} color="#fff" />
+          </Pressable>
+
+          <Text style={styles.title}>Medicamento</Text>
+        </View>
+        <View>
+          <Text style={styles.subtitle}>Registre seu remédio e receba lembretes.</Text>
+        </View>
       </LinearGradient>
 
       <View style={styles.formCard}>
@@ -666,6 +707,28 @@ export default function Remedio() {
         </View>
       </Modal>
       {/* ── FIM MODAL ── */}
+      {/* ── MODAL DE SUCESSO ── */}
+      <Modal
+        visible={modalSucesso}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setModalSucesso(false)}
+      >
+        <View style={styles.successOverlay}>
+          <View style={styles.successContainer}>
+
+            {/* Ícone */}
+            <View style={styles.successIconContainer}>
+              <Ionicons
+                name="checkmark-circle"
+                size={300}
+                color="#22C55E"
+              />
+            </View>
+
+          </View>
+        </View>
+      </Modal>
 
     </ScrollView>
   );
