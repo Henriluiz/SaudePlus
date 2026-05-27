@@ -38,6 +38,7 @@ export default function Remedio() {
   useEffect(() => {
     async function loadMedications() {
       try {
+
         const saved = await AsyncStorage.getItem(MEDICATION_KEY);
         if (!saved) return;
 
@@ -233,7 +234,7 @@ export default function Remedio() {
 
   async function scheduleNotificationForTime(timeString, medName, dosage) {
     const [hours, minutes] = timeString.split(':').map(Number);
-
+  
     if (Platform.OS === 'android') {
       await Notifications.setNotificationChannelAsync(CHANNEL_ID, {
         name: 'Lembrete de Remédio',
@@ -241,26 +242,22 @@ export default function Remedio() {
         sound: 'default',
       });
     }
-
-    const now = new Date();
-    const nextTime = new Date(now);
-    nextTime.setHours(hours, minutes, 0, 0);
-    if (nextTime <= now) {
-      nextTime.setDate(nextTime.getDate() + 1);
-    }
-    const secondsUntilNext = Math.round((nextTime.getTime() - now.getTime()) / 1000);
-
+  
     return Notifications.scheduleNotificationAsync({
       content: {
         title: `Hora de tomar ${medName}`,
-        body: dosage ? `Dosagem: ${dosage}` : 'Não esqueça de tomar seu remédio.',
+        body: dosage
+          ? `Dosagem: ${dosage}`
+          : 'Não esqueça de tomar seu remédio.',
         sound: 'default',
-        ...(Platform.OS === 'android' ? { channelId: CHANNEL_ID } : {}),
+        ...(Platform.OS === 'android'
+          ? { channelId: CHANNEL_ID }
+          : {}),
       },
       trigger: {
-        type: 'timeInterval',
-        seconds: Math.max(60, secondsUntilNext),
-        repeats: true,
+        type: Notifications.SchedulableTriggerInputTypes.DAILY,
+        hour: hours,
+        minute: minutes,
       },
     });
   }
@@ -273,7 +270,13 @@ export default function Remedio() {
     }
 
     if (oldNotificationIds?.length > 0) {
-      await Promise.all(oldNotificationIds.map(id => Notifications.cancelScheduledNotificationAsync(id)).catch(() => {}));
+      await Promise.all(
+        oldNotificationIds.map(id =>
+          Notifications
+            .cancelScheduledNotificationAsync(id)
+            .catch(() => {})
+        )
+      );
     }
 
     const ids = [];
@@ -362,7 +365,7 @@ export default function Remedio() {
       // Configuração relacionada com o modal de sucesso
       await playSuccessSound();
       setModalSucesso(true);
-      await new Promise(resolve => setTimeout(resolve, 10000));
+      await new Promise(resolve => setTimeout(resolve, 5000));
       setModalSucesso(false);
 
     } catch (error) {
