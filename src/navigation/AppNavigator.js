@@ -9,6 +9,7 @@ import IMC from "../page/imc";
 import Agua from "../page/agua";
 import Vacinas from "../page/vacinas";
 import VacinasLista from "../page/vacinasLista";
+import PostoMap from "../page/postomap";
 
 const Stack = createNativeStackNavigator();
 
@@ -25,6 +26,7 @@ export default function AppNavigator() {
       <Stack.Screen name="Remedio" component={Remedio} />
       <Stack.Screen name="Vacinas" component={Vacinas} />
       <Stack.Screen name="VacinasLista" component={VacinasLista} />
+      <Stack.Screen name="Postomap" component={PostoMap} />
     </Stack.Navigator>
   );
 }

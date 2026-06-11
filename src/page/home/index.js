@@ -73,7 +73,10 @@ export default function Home() {
           onPress={() => navigation.navigate("Vacinas")}
           icon={<MaterialCommunityIcons name="needle" size={30} color="#235347" />} 
         />
-          <Botao nome="Meditação" icon={<MaterialCommunityIcons name="meditation" size={30} color="#235347" />} />
+          <Botao 
+            nome="Postos"
+            onPress={() => navigation.navigate("Postomap")}
+            icon={<MaterialCommunityIcons name="map" size={30} color="#235347" />} />
         </View>
 
         <View style={styles.fileira}>
