@@ -58,4 +58,19 @@ export default StyleSheet.create({
     fontWeight: "600",
     marginTop: 5,
   },
+
+  botaoLogout: {
+    position: "absolute",
+    top: 55,
+    right: 20,
+
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+
+    justifyContent: "center",
+    alignItems: "center",
+
+    backgroundColor: "rgba(255,255,255,0.15)",
+  },
 });

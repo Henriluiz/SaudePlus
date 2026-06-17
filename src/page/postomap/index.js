@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -20,6 +20,7 @@ export default function PostoMap({ navigation }) {
   const [address, setAddress]                 = useState('');
   const [searchedLocation, setSearchedLocation] = useState(null);
   const [loading, setLoading]                 = useState(true);
+  const mapRef = useRef(null);
 
   // Pontos de interesse pré-definidos
   const [points] = useState([
@@ -123,11 +124,27 @@ export default function PostoMap({ navigation }) {
       Alert.alert('Campo vazio', 'Por favor, insira um endereço.');
       return;
     }
+
     try {
       const result = await Location.geocodeAsync(address);
+
       if (result.length > 0) {
         const { latitude, longitude } = result[0];
-        setSearchedLocation({ latitude, longitude });
+
+        setSearchedLocation({
+          latitude,
+          longitude,
+        });
+
+        mapRef.current?.animateToRegion(
+          {
+            latitude,
+            longitude,
+            latitudeDelta: 0.005,
+            longitudeDelta: 0.005,
+          },
+          1000 // duração da animação em ms
+        );
       } else {
         Alert.alert('Não encontrado', 'Endereço não encontrado.');
       }
@@ -200,6 +217,7 @@ export default function PostoMap({ navigation }) {
       {/* ── Mapa ── */}
       {location && !loading && (
         <MapView
+          ref={mapRef}
           style={styles.map}
           initialRegion={{
             latitude: location.coords.latitude,
@@ -229,6 +247,7 @@ export default function PostoMap({ navigation }) {
               title={point.title}
               description={point.description}
               // image={require('./assets/alf.png')}  ← descomente para ícone personalizado
+              pinColor="orange"
               onPress={() => setSearchedLocation(null)}
             />
           ))}
@@ -237,8 +256,8 @@ export default function PostoMap({ navigation }) {
           {searchedLocation && (
             <Marker
               coordinate={searchedLocation}
-              title="Novo Item"
-              description={`Endereço: ${address}`}
+              title="Endereço Buscado"
+              description={`${address}`}
               pinColor="blue"
               // image={require('./assets/alf.png')}  ← descomente para ícone personalizado
             />
@@ -255,7 +274,7 @@ export default function PostoMap({ navigation }) {
           </View>
           <View style={styles.legendRow}>
             <View style={[styles.legendDot, { backgroundColor: '#FF9500' }]} />
-            <Text style={styles.legendLabel}>Pontos de interesse</Text>
+            <Text style={styles.legendLabel}>UBS</Text>
           </View>
           {searchedLocation && (
             <View style={styles.legendRow}>

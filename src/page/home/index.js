@@ -3,9 +3,13 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 import styles from './styles';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAuth } from "../../context/AuthContext";
 
 export default function Home() {
   const navigation = useNavigation();
+
+  const { signOut } = useAuth();
 
 
   function Botao({ nome, icon, onPress }) {
@@ -34,12 +38,24 @@ export default function Home() {
         style={styles.header}
       >
         <Text style={styles.title}>HOME</Text>
+
+        <Pressable
+          style={styles.botaoLogout}
+          onPress={signOut}
+        >
+          <MaterialCommunityIcons
+            name="logout"
+            size={24}
+            color="#FFF"
+          />
+  </Pressable>
       </LinearGradient>
 
       <View style={styles.content}>
 
         <View style={styles.fileira}>
           <Botao nome="Sangue"
+          onPress={() => navigation.navigate("TipoSanguineo")}
            icon={<MaterialCommunityIcons name="water-plus" size={30} color="#235347" />} />
           <Botao nome="Água"
             onPress={() => navigation.navigate("Agua")}

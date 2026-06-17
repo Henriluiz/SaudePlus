@@ -62,7 +62,7 @@ export default function Login() {
       >
         {/* PARTE VERDE (topo) */}
         <View style={styles.containerImg}>
-          <Image style={styles.logo} />
+          <Image style={styles.logo}/>
         </View>
 
         {/* PARTE BRANCA */}

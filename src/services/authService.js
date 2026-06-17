@@ -11,8 +11,8 @@ export async function cadastro(data) {
   formData.append('genero', data.genero);
   formData.append('senha', data.senha);
   formData.append('data', data.dataNascimento);
-  formData.append('peso', data.peso);
-  formData.append('altura', data.altura);
+  formData.append('peso_kg', data.peso_kg);
+  formData.append('altura_cm', data.altura_cm);
 
   if (data.foto_perfil) {
     // WEB

@@ -19,6 +19,7 @@ export default StyleSheet.create({
   // TOPO VERDE
   containerImg: {
     alignItems: "center",
+    justifyContent: "flex-start",
     marginTop: hp("6%"),
     marginBottom: hp("2%"),
   },

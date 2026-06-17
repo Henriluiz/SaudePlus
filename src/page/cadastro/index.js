@@ -18,8 +18,8 @@ export default function Cadastro({route}) {
 
   const [nomeCompleto, setNomeCompleto] = useState("");
   const [dataNascimento, setDataNascimento] = useState("");
-  const [peso, setPeso] = useState("");
-  const [altura, setAltura] = useState("");
+  const [peso_kg, setPeso] = useState("");
+  const [altura_cm, setAltura] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
@@ -91,14 +91,14 @@ export default function Cadastro({route}) {
     } else setErroGenero("");
 
     
-    const pesoNum = parseFloat(peso.replace(",", "."));
-    if (!peso || isNaN(pesoNum) || pesoNum < 20 || pesoNum > 300) {
+    const pesoNum = parseFloat(peso_kg.replace(",", "."));
+    if (!peso_kg || isNaN(pesoNum) || pesoNum < 20 || pesoNum > 300) {
       setErroPeso("Peso inválido (20kg - 300kg)");
       valido = false;
     } else setErroPeso("");
     
-    const alturaNum = parseFloat(altura);
-    if (!altura || isNaN(alturaNum) || alturaNum < 100 || alturaNum > 250) {
+    const alturaNum = parseFloat(altura_cm);
+    if (!altura_cm || isNaN(alturaNum) || alturaNum < 100 || alturaNum > 250) {
       setErroAltura("Altura inválida (100cm - 250cm)");
       valido = false;
     } else setErroAltura("");
@@ -134,8 +134,8 @@ export default function Cadastro({route}) {
       navigation.navigate("cadastroFoto", {
         nomeCompleto,
         dataNascimento: dataISO,
-        peso,
-        altura,
+        peso_kg,
+        altura_cm,
         email,
         senha,
         genero
@@ -171,7 +171,7 @@ export default function Cadastro({route}) {
         
         {/* TOPO VERDE */}
         <View style={styles.containerImg}>
-          <Image style={styles.logo} source={require('../../../assets/saudemais_logo_white_text.svg')}/>
+          <Image style={styles.logo}/>
         </View>
 
         {/* PARTE BRANCA */}
@@ -222,7 +222,7 @@ export default function Cadastro({route}) {
 
               <TextInput
                 style={styles.input}
-                value={peso}
+                value={peso_kg}
                 onChangeText={setPeso}
                 placeholder="Peso (kg)"
                 keyboardType="numeric"
@@ -232,7 +232,7 @@ export default function Cadastro({route}) {
 
               <TextInput
                 style={styles.input}
-                value={altura}
+                value={altura_cm}
                 onChangeText={setAltura}
                 placeholder="Altura (cm)"
                 keyboardType="numeric"
